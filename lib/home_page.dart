@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/todo_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,53 +27,11 @@ class _HomePageState extends State<HomePage> {
         body: ListView(
           padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 200),
           children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black12),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(child: Text("플러터 복습")),
-                ],
-              ),
-            ),
+            TodoWidget(content: "플러터 복습", isDone: false),
 
             SizedBox(height: 20),
 
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black12),
-                      color: Colors.black,
-                    ),
-                    child: Icon(Icons.check, color: Colors.white, size: 16),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(child: Text("운동하기")),
-                ],
-              ),
-            ),
+            TodoWidget(content: "운동하기", isDone: true),
           ],
         ),
 
