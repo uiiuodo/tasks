@@ -37,15 +37,22 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(title: Text("가원's Tasks")),
 
-        body: ListView(
+        body: ListView.separated(
           padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 200),
-          children: [
-            TodoWidget(content: "플러터 복습", isDone: false),
+          itemCount: todoList.length,
+          separatorBuilder: (context, index) => SizedBox(height: 20),
+          itemBuilder: (context, index) {
+            Todo todo = todoList[index];
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  todo.isDone = !todo.isDone;
+                });
+              },
 
-            SizedBox(height: 20),
-
-            TodoWidget(content: "운동하기", isDone: true),
-          ],
+              child: TodoWidget(content: todo.title, isDone: todo.isDone),
+            );
+          },
         ),
 
         bottomSheet: Container(
