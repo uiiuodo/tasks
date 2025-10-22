@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:tasks/todo.dart';
 import 'package:tasks/todo_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,6 +11,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController controller = TextEditingController();
+
+  List<Todo> todoList = [];
+
+  void onCreate() {
+    setState(() {
+      Todo newTodo = Todo(title: controller.text, isDone: false);
+      todoList.add((newTodo));
+      print(todoList.length);
+    });
+  }
 
   @override
   void dispose() {
