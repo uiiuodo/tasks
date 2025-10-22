@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:tasks/todo.dart';
 import 'package:tasks/todo_widget.dart';
@@ -17,8 +15,8 @@ class _HomePageState extends State<HomePage> {
   void onCreate() {
     setState(() {
       Todo newTodo = Todo(title: controller.text, isDone: false);
-      todoList.add((newTodo));
-      print(todoList.length);
+      todoList.add(newTodo);
+      controller.clear();
     });
   }
 
