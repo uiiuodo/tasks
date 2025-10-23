@@ -32,7 +32,7 @@ class TodoWidget extends StatelessWidget {
                 onPressed: onToggleDone,
                 icon: Icon(
                   todo.isDone ? Icons.check_circle : Icons.circle_outlined,
-                  color: todo.isDone ? Colors.green : null,
+                  color: todo.isDone ? Colors.black : null,
                 ),
               ),
               const SizedBox(width: 8),
@@ -51,7 +51,10 @@ class TodoWidget extends StatelessWidget {
               // 즐겨찾기 토글
               IconButton(
                 onPressed: onToggleFavorite,
-                icon: Icon(todo.isFavorite ? Icons.star : Icons.star_border),
+                icon: Icon(
+                  todo.isFavorite ? Icons.star : Icons.star_border,
+                  color: todo.isFavorite ? Colors.amber : Colors.grey,
+                ),
               ),
             ],
           ),

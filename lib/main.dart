@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black, // 🖤 글씨색 (가원`s Tasks)
           titleTextStyle: TextStyle(
             fontSize: 20, // 글씨 크기 키움
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold,
             color: Colors.black, // 굵게
           ),
         ),
