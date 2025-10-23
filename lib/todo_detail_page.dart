@@ -31,6 +31,7 @@ class _ToDoDetailPageState extends State<ToDoDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFD6D6D6),
       appBar: AppBar(
         leading: IconButton(
           onPressed: _goBack,

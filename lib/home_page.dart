@@ -3,6 +3,7 @@ import 'todo_entity.dart';
 import 'todo_widget.dart';
 import 'add_todo_sheet.dart';
 import 'todo_detail_page.dart';
+import 'no_todo_view.dart'; // ⬅️ 추가
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -52,25 +53,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 키보드와 무관하게 FAB 고정
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false, // FAB 고정
+      backgroundColor: const Color(0xFFD6D6D6),
       appBar: AppBar(title: const Text("가원`s Tasks")),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: _todos.isEmpty
-            ? Center(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    "할 일이 없음\n \n할 일을 추가하고 가원'Tasks에서\n할 일을 추적하세요.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, height: 1.5),
-                  ),
-                ),
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [NoTodoView(appTitle: "가원`s Tasks")],
               )
             : ListView.separated(
                 itemCount: _todos.length,
@@ -85,6 +76,8 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addTodo,
+        backgroundColor: Color(0xFF5C6BC0), // ✅ 버튼 색 변경
+        shape: const CircleBorder(), // ✅ 원형 보장
         child: const Icon(Icons.add, color: Colors.white, size: 24),
       ),
     );
