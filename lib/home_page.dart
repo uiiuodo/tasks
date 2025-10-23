@@ -1,91 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/todo.dart';
-import 'package:tasks/todo_widget.dart';
+import 'todo_entity.dart';
+import 'todo_widget.dart';
+import 'add_todo_sheet.dart';
+import 'todo_detail_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController controller = TextEditingController();
+  final List<ToDoEntity> _todos = [];
 
-  List<Todo> todoList = [];
+  Future<void> _addTodo() async {
+    final ToDoEntity? created = await showModalBottomSheet<ToDoEntity>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const AddTodoSheet(),
+    );
+    if (created != null) {
+      setState(() => _todos.insert(0, created));
+    }
+  }
 
-  void onCreate() {
+  void _toggleDone(int index) {
     setState(() {
-      Todo newTodo = Todo(title: controller.text, isDone: false);
-      todoList.add(newTodo);
-      controller.clear();
+      _todos[index] = _todos[index].copyWith(isDone: !_todos[index].isDone);
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
+  void _toggleFavorite(int index) {
+    setState(() {
+      _todos[index] = _todos[index].copyWith(
+        isFavorite: !_todos[index].isFavorite,
+      );
+    });
+  }
+
+  Future<void> _openDetail(int index) async {
+    final ToDoEntity? updated = await Navigator.push<ToDoEntity>(
+      context,
+      MaterialPageRoute(builder: (_) => ToDoDetailPage(todo: _todos[index])),
+    );
+    if (updated != null) {
+      setState(() => _todos[index] = updated);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text("가원's Tasks")),
-
-        body: ListView.separated(
-          padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 200),
-          itemCount: todoList.length,
-          separatorBuilder: (context, index) => SizedBox(height: 20),
-          itemBuilder: (context, index) {
-            Todo todo = todoList[index];
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  todo.isDone = !todo.isDone;
-                });
-              },
-
-              child: TodoWidget(content: todo.title, isDone: todo.isDone),
-            );
-          },
-        ),
-
-        bottomSheet: Container(
-          color: Colors.white,
-          padding: EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 40),
-          child: TextField(
-            controller: controller,
-            maxLines: 1,
-            onSubmitted: (value) {
-              print("여기서도 투두 추가할거임");
-              print(value);
-            },
-            decoration: InputDecoration(
-              hintText: "새 할 일",
-              border: InputBorder.none,
-              fillColor: Colors.blue.withValues(alpha: 0.1),
-              filled: true,
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  print("아이템 추가할거임");
-                  print(controller.text);
-                },
+    return Scaffold(
+      // 키보드와 무관하게 FAB 고정
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: const Text("가원`s Tasks")),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: _todos.isEmpty
+            ? Center(
                 child: Container(
-                  margin: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(Icons.add, color: Colors.white),
+                  child: const Text(
+                    "할 일이 없음\n \n할 일을 추가하고 가원'Tasks에서\n할 일을 추적하세요.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, height: 1.5),
+                  ),
+                ),
+              )
+            : ListView.separated(
+                itemCount: _todos.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) => TodoWidget(
+                  todo: _todos[index],
+                  onToggleDone: () => _toggleDone(index),
+                  onToggleFavorite: () => _toggleFavorite(index),
+                  onTap: () => _openDetail(index),
                 ),
               ),
-              suffixIconConstraints: BoxConstraints(),
-            ),
-          ),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addTodo,
+        child: const Icon(Icons.add, color: Colors.white, size: 24),
       ),
     );
   }

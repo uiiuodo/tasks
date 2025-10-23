@@ -1,36 +1,61 @@
 import 'package:flutter/material.dart';
+import 'todo_entity.dart';
 
 class TodoWidget extends StatelessWidget {
-  TodoWidget({required this.content, required this.isDone});
+  final ToDoEntity todo;
+  final VoidCallback onToggleDone;
+  final VoidCallback onToggleFavorite;
+  final VoidCallback onTap;
 
-  String content;
-  bool isDone;
+  const TodoWidget({
+    super.key,
+    required this.todo,
+    required this.onToggleDone,
+    required this.onToggleFavorite,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: EdgeInsets.all(20),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.black12),
-              color: isDone ? Colors.black : null,
-            ),
-            child: isDone
-                ? Icon(Icons.check, color: Colors.white, size: 16)
-                : null,
+    return Material(
+      color: Colors.grey[100],
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              // 완료 토글
+              IconButton(
+                onPressed: onToggleDone,
+                icon: Icon(
+                  todo.isDone ? Icons.check_circle : Icons.circle_outlined,
+                  color: todo.isDone ? Colors.green : null,
+                ),
+              ),
+              const SizedBox(width: 8),
+              // 제목
+              Expanded(
+                child: Text(
+                  todo.title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    decoration: todo.isDone
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  ),
+                ),
+              ),
+              // 즐겨찾기 토글
+              IconButton(
+                onPressed: onToggleFavorite,
+                icon: Icon(todo.isFavorite ? Icons.star : Icons.star_border),
+              ),
+            ],
           ),
-          SizedBox(width: 20),
-          Expanded(child: Text(content)),
-        ],
+        ),
       ),
     );
   }
